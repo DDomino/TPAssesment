@@ -50,10 +50,10 @@ Fetch a requested review from the database based on id and returns it as dictona
 NOTE: I have decided to go with pythons dictonary as it gives better readability of the code eg. review['Reviewer Name'] instead of review[1], especially when it comes to the data objects for the queries. Another option would be to make a Review entity with constructor, setter and getters and use functions like "review.reviewerName"
 
 Additional Extensions would be:
-*Delete review function
-*Delete multiple function
-*Update multiple function
-*Get on additional parameters
-*Archive architecture 
-*UpdateDate field
+- Delete review function
+- Delete multiple function
+- Update multiple function
+- Get on additional parameters
+- Archive architecture 
+- UpdateDate field
 
