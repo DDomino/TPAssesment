@@ -5,7 +5,7 @@ This is my code for my Tech Assesment at Trustpilot.
 The assignement is detailed in the docuements folder.
 
 For this assignement i went with Python for my language and Postgres as a database.
-Additional python packages neede for this project is the "psycopg2" package and "Pandas"
+Additional python packages needed for this project is "psycopg2" and "Pandas"
 
 ```
 python -m pip install psycopg2
@@ -56,4 +56,12 @@ Additional Extensions would be:
 - Get on additional parameters
 - Archive architecture 
 - UpdateDate field
+
+## Main.py
+This file function as a facade for the dbcontroller.py. The file has the required data objects and functions to run and test against the dbcontroller.py 
+
+# How would I run in a production environment?
+I would make an application and run it with either flask or django, that i would host on Azure Cloud platform.
+Postgres database i would aswell host on Azure Cloud platform, probably in a container.
+Addtionally i would make a CI/CD pipline connected between Azure and Github. 
 
