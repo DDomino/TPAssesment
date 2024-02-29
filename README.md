@@ -12,8 +12,8 @@ python -m pip install psycopg2
 python -m pip install pandas
 ```
 # Files and Functions
-The code has two files:
-database/dbcontroller.py and Main.py
+The code consist of three files:
+database/dbcontroller.py, Main.py and utility.py 
 
 ## dbcontroller.py
 This file contains the connector to the database aswell as the requested CRUD operation
@@ -59,6 +59,21 @@ Additional Extensions would be:
 
 ## Main.py
 This file function as a facade for the dbcontroller.py. The file has the required data objects and functions to run and test against the dbcontroller.py 
+
+## utility.py
+This file contains more general functions. 
+```
+validateEmail(email)
+sanitize(text)
+```
+Each are used to clean the data: 
+- validateEmail ensures that emails confine to a specific composition.
+- sanitize ensures no XSS in the content or title, aswell as removes Emojies.
+
+NOTE: I have chosen to remove emojies as this assignment is for a position as Data Engineer. I therefore make the asumption that 
+the data is to be used for Data analysis purposes. If emojies would be important for analysis i recommend an emoji count field in the database.
+If an application fetches and display the reviews, I would keep the emojies in the content
+
 
 # How would I run in a production environment?
 I would make an application and run it with either flask or django, that i would host on Azure Cloud platform.

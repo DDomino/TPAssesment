@@ -1,25 +1,13 @@
 import psycopg2
-import html
 import pandas as pd
-import re
+
 
 dbname = ''
 user = ''
 password = ''
 host = ''
 
-# Normally i would sanitize on input from frontend or earlier in the process
-def sanitize(text):
-    '''
-    Sanitizes a provided text for emojies, and possible XSS.
-    parameters:
-        text (String): The text or string to be sanitized.
-    returns:
-        text (String): The sanitized text or string.
-    '''
-    text = html.escape(re.sub(r'[^\w\s,]', '', text))
-    return text #Escaped to remove possible XSS and removes emojies
-    #I have chosen to remove emojies as this is for data analysis purposes.
+
 
 def getDBConnection():
     '''
@@ -62,8 +50,8 @@ def insertReview(review, cursor):
         psycopg2.Error: If error on execute
     '''
     try:
-        insert_data = (review['Reviewer Name'], sanitize(review['Review Title']),
-                           review['Review Rating'],sanitize(review['Review Content']),
+        insert_data = (review['Reviewer Name'], review['Review Title'],
+                           review['Review Rating'],review['Review Content'],
                            review['Email Address'],review['Country'],review['Review Date'], )
         query = '''
                 INSERT INTO dataopstpreviewtable (
@@ -136,10 +124,11 @@ def insertOneOrMoreReview(reviews):
     Raises:
         psycopg2.Error: If error in insertReview(review, cursor)
     '''
-    conn = getDBConnection()
-    cursor = conn.cursor()
+    print(len(reviews))
     inserted_Ids = []
     try:
+        conn = getDBConnection()
+        cursor = conn.cursor()
         for review in reviews:
             review_Id = insertReview(review, cursor)
             inserted_Ids.append(review_Id)
@@ -181,8 +170,8 @@ def updateReview(old_review, new_review):
     cursor = conn.cursor()
     if cursor is not None:
         try:
-            update_data = (new_review['Reviewer Name'],sanitize(new_review['Review Title']),
-                           new_review['Review Rating'],sanitize(new_review['Review Content']),
+            update_data = (new_review['Reviewer Name'],new_review['Review Title'],
+                           new_review['Review Rating'],new_review['Review Content'],
                            new_review['Email Address'],new_review['Country'],new_review['Review Date'], old_review['id'])
             query = '''
             UPDATE dataopstpreviewtable SET 

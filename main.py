@@ -1,6 +1,7 @@
 from database.dbcontroller import insertOneOrMoreReview, fetchReviewById, updateReview, insertSingelReview
 import pandas as pd
 from datetime import datetime
+from utility import validateEmail, sanitize
 
 csv_file_dir = 'data/dataops_tp_reviews.csv'
 
@@ -31,6 +32,23 @@ updated_review = {'id': None, 'Reviewer Name': 'Original Man',
               'Review Content': 'This review has been updated',
               'Email Address': 'up@date.com', 'Country':'USA', 'Review Date':date}
 
+
+def cleanText(data):
+    '''
+    Sanatizes the two textfields "Review Title" and "Review Content" for
+    Potential Cross Site Scripting, and removes Emojies.
+    Parameter:
+            data (dict): The dictionary to be processed
+    Returns:
+            data (dict): Returns a dictionary with the fields "Review Title" and "Review Content" sanitized
+    '''
+    data_for_validation = data
+    data_for_validation['Review Title'] = sanitize(data['Review Title'])
+    data_for_validation['Review Content'] = sanitize(data['Review Content'])
+    return data_for_validation
+
+
+
 #Populates the Database from the provided CSV file
 def populateFromCSV(csv_file):
     '''
@@ -41,12 +59,17 @@ def populateFromCSV(csv_file):
         FileNotFoundError: If file does not exsist.
     '''
     try:
+        cleaned_data = []
         data = pd.read_csv(csv_file)
         data_dict = data.to_dict(orient='records')
-        if len(data_dict) > 1:
-            insertOneOrMoreReview(data_dict)
+        for entry in data_dict:
+            if validateEmail(entry['Email Address']):
+                cleaned_data.append(cleanText(entry))
+        print(len(cleaned_data))
+        if len(cleaned_data) > 1:
+            insertOneOrMoreReview(cleaned_data)
         else:
-            insertSingelReview(data_dict[0])
+            insertSingelReview(cleaned_data[0])
     except FileNotFoundError as e:
         print(f'Error: {e}')
     except:
